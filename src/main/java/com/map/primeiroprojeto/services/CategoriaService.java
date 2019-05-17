@@ -18,15 +18,17 @@ public class CategoriaService {
 	private CategoriaRepository repo;
 	
 	
-	public Categoria buscar(Integer id) {		
+	public Categoria buscar(Integer id) throws ObjectNotFoundException {		
 		Optional<Categoria> cat =repo.findById(id);		
 		//Opcao de retorno 01 - retorno simples sem tratamento de excecao
 		//return cat.orElse(null);
 		
 		//Opcao de retorno 02 - com excecao Padrao - usando classe RuntimeException
-		return cat.orElseThrow(() -> new RuntimeException("OPT:02: Deu pau - Objeto nao Encontrado! Id: "+id+" - Tipo: "+ Categoria.class.getName()) );
+		//return cat.orElseThrow(() -> new RuntimeException("OPT:02: Deu pau - Objeto nao Encontrado! Id: "+id+" - Tipo: "+ Categoria.class.getName()) );
 	
-		
+		//Opcao de retorno 03 - com excecao Padrao - usando classe RuntimeException
+		return cat.orElseThrow(	() -> new ObjectNotFoundException(
+				"OPT 03: Objeto nao encontrado! Id: "+ id + "- TIPO: "+ Categoria.class.getName() )  );
 	}
 	
 	

@@ -25,7 +25,7 @@ public class CategoriaResource {
 	
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<?> find(@PathVariable Integer id)  {
+	public ResponseEntity<?> find(@PathVariable Integer id) throws ObjectNotFoundException {
 		
 		Categoria cat= servico.buscar(id);				
 		return ResponseEntity.ok().body(cat) ;
