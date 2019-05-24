@@ -1,5 +1,6 @@
 package com.map.primeiroprojeto;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,20 @@ import com.map.primeiroprojeto.domain.Cidade;
 import com.map.primeiroprojeto.domain.Cliente;
 import com.map.primeiroprojeto.domain.Endereco;
 import com.map.primeiroprojeto.domain.Estado;
+import com.map.primeiroprojeto.domain.Pagamento;
+import com.map.primeiroprojeto.domain.PagamentoComBoleto;
+import com.map.primeiroprojeto.domain.PagamentoComCartao;
+import com.map.primeiroprojeto.domain.Pedido;
 import com.map.primeiroprojeto.domain.Produto;
+import com.map.primeiroprojeto.domain.enums.EstadoPagamento;
 import com.map.primeiroprojeto.domain.enums.TipoCliente;
 import com.map.primeiroprojeto.repositories.CategoriaRepository;
 import com.map.primeiroprojeto.repositories.CidadeRepository;
 import com.map.primeiroprojeto.repositories.ClienteRepository;
 import com.map.primeiroprojeto.repositories.EnderecoRepository;
 import com.map.primeiroprojeto.repositories.EstadoRepository;
+import com.map.primeiroprojeto.repositories.PagamentoRepository;
+import com.map.primeiroprojeto.repositories.PedidoRepository;
 import com.map.primeiroprojeto.repositories.ProdutoRepository;
 
 
@@ -44,6 +52,13 @@ public class PrimeiroProjetoApplication implements CommandLineRunner {
 	
 	@Autowired
 	EnderecoRepository repoEnd;
+	
+	@Autowired
+	PagamentoRepository repoPaga;
+	
+	@Autowired
+	PedidoRepository repoPedi;
+	
 	
 	
 	
@@ -93,6 +108,24 @@ public class PrimeiroProjetoApplication implements CommandLineRunner {
 		
 		cli1.getEnderecos().addAll(Arrays.asList(e1,e2));
 		
+		//Instancia o objeto que trata de DATA e HORA
+		SimpleDateFormat sdf= new SimpleDateFormat("dd/MM/yyyy hh:mm");
+		
+		
+		//Pedidos e pagamentos-------------------
+		
+		Pedido ped1= new Pedido(null,sdf.parse("30/09/2017 10:32"), cli1,e1);
+		Pedido ped2= new Pedido(null,sdf.parse("10/10/2017 19:35"), cli1,e2);
+			
+		
+		Pagamento pagto1 = new PagamentoComCartao(null,EstadoPagamento.QUITADO,ped1,6);
+		ped1.setPagamento(pagto1);
+		Pagamento pagto2 = new PagamentoComBoleto(null,EstadoPagamento.PENDENTE,ped2,sdf.parse("20/10/2017 00:00"),null);
+		ped2.setPagamento(pagto2);
+		
+		cli1.getPedidos().addAll(Arrays.asList(ped1,ped2));
+		
+		//------------------------------
 		
 		repoCat.saveAll(Arrays.asList(cat1,cat2));
 		repoProd.saveAll(Arrays.asList(p1,p2,p3));
@@ -101,6 +134,9 @@ public class PrimeiroProjetoApplication implements CommandLineRunner {
 		
 		repoCli.saveAll(Arrays.asList(cli1));
 		repoEnd.saveAll(Arrays.asList(e1,e2));
+		
+		repoPedi.saveAll(Arrays.asList(ped1,ped2));
+		repoPaga.saveAll(Arrays.asList(pagto1,pagto2));
 		
 	}
 
