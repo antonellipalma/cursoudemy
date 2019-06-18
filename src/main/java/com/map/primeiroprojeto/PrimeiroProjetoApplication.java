@@ -2,6 +2,7 @@ package com.map.primeiroprojeto;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -13,6 +14,7 @@ import com.map.primeiroprojeto.domain.Cidade;
 import com.map.primeiroprojeto.domain.Cliente;
 import com.map.primeiroprojeto.domain.Endereco;
 import com.map.primeiroprojeto.domain.Estado;
+import com.map.primeiroprojeto.domain.ItemPedido;
 import com.map.primeiroprojeto.domain.Pagamento;
 import com.map.primeiroprojeto.domain.PagamentoComBoleto;
 import com.map.primeiroprojeto.domain.PagamentoComCartao;
@@ -25,6 +27,7 @@ import com.map.primeiroprojeto.repositories.CidadeRepository;
 import com.map.primeiroprojeto.repositories.ClienteRepository;
 import com.map.primeiroprojeto.repositories.EnderecoRepository;
 import com.map.primeiroprojeto.repositories.EstadoRepository;
+import com.map.primeiroprojeto.repositories.ItemPedidoRepository;
 import com.map.primeiroprojeto.repositories.PagamentoRepository;
 import com.map.primeiroprojeto.repositories.PedidoRepository;
 import com.map.primeiroprojeto.repositories.ProdutoRepository;
@@ -59,7 +62,8 @@ public class PrimeiroProjetoApplication implements CommandLineRunner {
 	@Autowired
 	PedidoRepository repoPedi;
 	
-	
+	@Autowired
+	ItemPedidoRepository repoItemPedi;
 	
 	
 	
@@ -125,6 +129,21 @@ public class PrimeiroProjetoApplication implements CommandLineRunner {
 		
 		cli1.getPedidos().addAll(Arrays.asList(ped1,ped2));
 		
+		
+		ItemPedido ip1=new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2=new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3=new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+		
+		//ped1.setItens((Set<ItemPedido>) Arrays.asList(ip1,ip2));
+		//ped2.setItens((Set<ItemPedido>) Arrays.asList(ip3));
+		ped1.getItens().addAll(Arrays.asList(ip1,ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+		
 		//------------------------------
 		
 		repoCat.saveAll(Arrays.asList(cat1,cat2));
@@ -137,6 +156,9 @@ public class PrimeiroProjetoApplication implements CommandLineRunner {
 		
 		repoPedi.saveAll(Arrays.asList(ped1,ped2));
 		repoPaga.saveAll(Arrays.asList(pagto1,pagto2));
+		
+		repoItemPedi.saveAll(Arrays.asList(ip1,ip2,ip3));
+		
 		
 	}
 
