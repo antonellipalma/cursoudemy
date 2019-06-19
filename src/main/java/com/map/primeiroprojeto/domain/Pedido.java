@@ -17,6 +17,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 public class Pedido implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -28,10 +30,12 @@ public class Pedido implements Serializable{
 	private Integer id;
 	private Date instante;
 	
-	
+	@JsonManagedReference
 	@OneToOne(cascade=CascadeType.ALL, mappedBy="pedido")
 	private Pagamento pagamento;
 	
+	
+	@JsonManagedReference   //para garantir a referencia em Json do Cliente : nao esquecendo de por em Cliente (@JsonBackReference) para evitar referencia cruzada
 	@ManyToOne
 	@JoinColumn(name="cliente_id")
 	private Cliente cliente;
@@ -41,6 +45,7 @@ public class Pedido implements Serializable{
 	private Endereco enderecoDeEntrega;
 
 	//USO DO SET : O proprio JAVA garante que nao havera item repetido no mesmo pedido
+	@JsonManagedReference //MAP
 	@OneToMany(mappedBy="id.pedido")
 	private Set<ItemPedido>itens= new HashSet<>();
 	
